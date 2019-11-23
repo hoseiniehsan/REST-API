@@ -3,9 +3,9 @@
 ### Resources
 
 * Homepage: <!-- <http://opencv.org> -->
-* Docs: <!--- <http://docs.opencv.org/master/> --->
-* Q&A forum: <!--- <http://answers.opencv.org> --->
-* Issue tracking: <!--- <https://github.com/opencv/opencv/issues> --->
+* Docs: <!-- <http://docs.opencv.org/master/> -->
+* Q&A forum: <!-- <http://answers.opencv.org> -->
+* Issue tracking: <!-- <https://github.com/opencv/opencv/issues> -->
 
 ### Contributing
 
@@ -14,6 +14,7 @@ Please read the [contribution guidelines](https://github.com/opencv/opencv/wiki/
 #### Summary of the guidelines:
 
 * One pull request per issue;
+        sudo git clone https://github.com/hoseiniehsan/REST-API.git
 * Choose the right base branch;
 * Include tests and documentation;
 * Clean up "oops" commits before submitting;
