@@ -88,7 +88,7 @@ class RESTAPI(object):
         try:
             payload = {
                 "shape": shape,
-                "postId": postId
+                "signId": postId
                 }
             #json_string = self.parse_json_file(self.url+ str(place))
             #print('json_string: \n', json_string)
@@ -96,7 +96,7 @@ class RESTAPI(object):
             return requests.api.post(self.url+ place, \
                                  json={
                                          'shape': shape,
-                                         'postId': postId, # last comma doesn't matter
+                                         'signId': postId, # last comma doesn't matter
                                          })#, \
                                  #auth=auth)#, header=self.header)
         except APIError as error:
