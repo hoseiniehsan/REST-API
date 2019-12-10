@@ -11,6 +11,7 @@ for communication with web services.
 
 import requests
 import pdb
+import numpy as np
 #import AptUrl
 #import dropbox
 #from dropbox.exceptions import ApiError
@@ -19,7 +20,8 @@ import json
 # from filename.py import class
 
 # self defined classes
-from APIError import APIError
+#from APIError import APIError # or
+from src.APIError import APIError
 
 
 pdb.set_trace()
@@ -27,7 +29,11 @@ res = requests.api.get('https://google.com')
 print('response of GET requests from google.com is: {}'.format(res))
 pdb.set_trace()
 
+'''
 
+# constract the argument parse and parse the arguments block
+
+'''
 
 
 class RESTAPI(object):
@@ -90,7 +96,7 @@ class RESTAPI(object):
             return requests.api.post(self.url+ place, \
                                  json={
                                          'shape': shape,
-                                         'postId': postId,
+                                         'postId': postId, # last comma doesn't matter
                                          })#, \
                                  #auth=auth)#, header=self.header)
         except APIError as error:
@@ -98,9 +104,10 @@ class RESTAPI(object):
         
     def do_post(self, place="", payload=""):
         try:
-            return requests.api.post(self.url+ place, \
-                                     json=payload
-                    )
+            url = self._url(place)
+            return requests.api.post(url, json=payload)
+            #return requests.api.post(url, data = json.dumps(payload))
+        
         except APIError as error:
             return error;
         
@@ -117,6 +124,23 @@ class RESTAPI(object):
         except APIError as error:
             return error;
         
+    def do_put(self, rel_url, idNr, payload=""):
+        try:
+            url=self._url(rel_url+'/{:d}/'.format(idNr))
+            return requests.api.put(url = url, json = payload)
+        except APIError as e:
+            return e;
+        
+    def do_del(self, rel_url, idNr):
+        try:
+            url = self._url(rel_url+'/{:d}/'.format(idNr))
+            return requests.api.delete(url)
+        except APIError as e:
+            return e;
+        
+    def _url(self, rel_url=""):
+        return self.url+rel_url
+    
     @staticmethod
     def parse_json_file(json_file):
         with open(str(json_file)) as file_json:
@@ -140,13 +164,31 @@ if __name__ == '__main__':
     
     #add_item_resp = restAPI.add_item(place='/comments/', shape="cube", postId="2")
     payload_add_to_traffic_signs={
-            'name': "green_light",
+            'name': "STOP"
             }
-    add_item_resp = restAPI.do_post(place='/traffic_signs/', payload=payload_add_to_traffic_signs)
+    #add_item_resp = restAPI.do_post(place='/traffic_signs/', payload=payload_add_to_traffic_signs)
     
-    restAPI.eval_resp(add_item_resp)
-    restAPI.eval_response(add_item_resp)
+    #restAPI.eval_resp(add_item_resp)
+    #restAPI.eval_response(add_item_resp)
+    
     restAPI.get_items(place='/comments/')
+    
     keys = {'k1':'name'}
     restAPI.do_get(place='/traffic_signs/', **keys)
+    
+    # do put to change or update json
+    update_payload={
+            'name':'yellow_light',
+            }
+    #restAPI.do_put(rel_url='/traffic_signs/', idNr=3, payload=update_payload)
+    
+    # do delete
+    #restAPI.eval_response(restAPI.do_del('/traffic_signs/', 9))
+    restAPI.do_get('/traffic_signs/', **keys)
+    
+    '''
+    IDs = np.arange(4,9)[::-1] # returned idNrs but reverse from 8 to 4
+    for iD in IDs:
+        restAPI.do_del('/traffic_signs/', iD)
+    '''
     
