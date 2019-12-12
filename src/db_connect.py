@@ -14,6 +14,11 @@ Installtion:
     and then run as admin:
         -H to add permission to /home/YOUR_USER/.cache/pip
         sudo -H python3 -m pip install PyMySQL
+        
+    to install MySQLdb package:
+        sudo -H python3 -m pip install MySQL-python
+        or
+        sudo -H pip install MySQL
 '''
 
 # Compatibility Python 2/3 or higher
@@ -23,6 +28,9 @@ __author__ = "Author: Ehsan Hosseini"
 # built-in modules
 import pymysql.cursors
 import json
+
+import MySQLdb
+
 
 
 # define classes
@@ -43,7 +51,7 @@ class DbConnection(object):
                                          cursorclass=connection_str['cursorclass']
                     )
             return connection
-        except NameError as e:
+        except MySQLdb.connections.Error as e:
             print('connection to DB failed! {}'.format(e))
             return False;
     
@@ -73,7 +81,7 @@ class DbConnection(object):
                     result = cursor.fetchall()
             return result
 
-        except NameError as e:
+        except MySQLdb.Error as e:
             print('SELECT query failed! {}'.format(e))
             return False
         '''
@@ -89,13 +97,13 @@ class DbConnection(object):
             # create a new record
             with self.connection.cursor() as cursor:
                 for value in sorted(values):
-                    cursor.execute(sql_query, (values[value],))
+                    cursor.execute(sql_query, (values[value], ))
                 
             # connection is not autocommit by default. So it must be commited 
             # to save changes.
             self.connection.commit()
             return True
-        except NameError as e:
+        except MySQLdb.Error as e:
             print('INSERT query failed! {}'.format(e))
             return False
         '''
@@ -137,8 +145,10 @@ if __name__ == '__main__':
     
     print('result of sql quey SELECT WHERE SignID=1 : %s' % result)
     
-    values = {'Name':'green_light'}
+    values = {'Name':'yellow_light'}
     insert_query = "INSERT INTO traffic_signs.Signs (Name) VALUES (%s)"
+    # to avoid insert duplicate Values you can use 'IGNORE' option in SQL INSERT Statement
+    # "INSERT IGNORE INTO traffic_signs.Signs (Name) VALUES (%s)"
     #dbConnect.do_insert(insert_query, **values)
     
     

@@ -19,15 +19,22 @@ import json
 #import APIError.APIError
 # from filename.py import class
 
+import sys
+sys.path.insert(0, '../src')
+
+
 # self defined classes
 #from APIError import APIError # or
-from src.APIError import APIError
+from APIError import APIError
 
-
+'''
 pdb.set_trace()
 res = requests.api.get('https://google.com')
 print('response of GET requests from google.com is: {}'.format(res))
 pdb.set_trace()
+'''
+
+
 
 '''
 
@@ -37,12 +44,13 @@ pdb.set_trace()
 
 
 class RESTAPI(object):
-    def __init__(self):
+    def __init__(self, url):
         print('class RESTAPI is initiated \n')
         self.header = {
-                'x-rapidapi-host': "alexnormand-dino-ipsum.p.rapidapi.com",
-                'x-rapidapi-key': "SIGN-UP-FOR-KEY"
+                'host': "localhost",
+                'Domain': "ehsan_hosseini_Domain"
                 }
+        self.url = url
     
         
     def get_response(self, url):
@@ -120,7 +128,7 @@ class RESTAPI(object):
                 for key in sorted(keys):
                     print('\t {}'.format(item[keys[key]]))
                 print('\n')
-            return True
+            return response
         except APIError as error:
             return error;
         
